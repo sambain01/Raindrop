@@ -3,92 +3,90 @@ var lastValue;
 var timePeriod = 24;
 var showCumulativeData;
 
-var newChart = new Chart("myChart", {
-    type: 'line',
-    data: {
-        labels: [],
-        datasets: [{
-            data: []
-        }],
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: "Rainfall (mm)"
-                } 
-            }],
-            xAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: "Time Of Day"
-                } 
-            }]
-            
-        }
-    }
 
-});
+function getData() {
 
-function getData(timePeriod, showCumulativeData) {
-    var dateArray = [];
-    var rainfallArray = [];
-    var rainfallCumulativeArray = [];
+    var combinedArray = [];
 
     // Variables to save database current values
     var dateTimeString;
     var timeString;
     var dateTime;
     var rainfall;
-    var rainfallCumulative = 0;
 
-    firebase.database().ref(genericPath).limitToLast(timePeriod).once('value').then(function(snapshot) {
+    firebase.database().ref(genericPath).once('value').then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             rainfall = parseFloat(childSnapshot.child("RainfallTotal").val());
             dateTimeString = childSnapshot.child("DateTime").val();
             dateTime = new Date(dateTimeString);
-            dateTime.setMinutes(Math.round(dateTime.getMinutes() / 60) * 60); // round minutes to nearest hour
-            dateTime.setSeconds(0);
-            timeString = `${dateTime.getHours()}:00`;
+            timeString = parseInt(dateTime.getTime())
 
-            rainfallArray.push(rainfall);
-            dateArray.push(timeString);
-
-            rainfallCumulative += rainfall;
-            rainfallCumulativeArray.push(rainfallCumulative);
-            document.getElementById("reading-float").innerHTML = rainfall;
-            document.getElementById("reading-int").innerHTML = timeString;
-            
-            newChart.data.labels = dateArray;
-            if (showCumulativeData) {
-                newChart.data.datasets[0].data = rainfallCumulativeArray;
-            } else {
-                newChart.data.datasets[0].data = rainfallArray;
-            }
-            
-            
+            combinedArray.push([timeString, rainfall]) 
         });
-        newChart.update()
+        
+        Highcharts.stockChart('myChart', {
+
+            chart: {
+                height: 300
+            },
+        
+            rangeSelector: {
+                allButtonsEnabled: true,
+                buttons: [{
+                    type: 'month',
+                    count: 3,
+                    text: 'Day',
+                    dataGrouping: {
+                        forced: true,
+                        units: [['day', [1]]]
+                    }
+                }, {
+                    type: 'year',
+                    count: 1,
+                    text: 'Week',
+                    dataGrouping: {
+                        forced: true,
+                        units: [['week', [1]]]
+                    }
+                }, {
+                    type: 'all',
+                    text: 'Month',
+                    dataGrouping: {
+                        forced: true,
+                        units: [['month', [1]]]
+                    }
+                }],
+                buttonTheme: {
+                    width: 60
+                },
+                selected: 2
+            },
+        
+            _navigator: {
+                enabled: false
+            },
+        
+            series: [{
+                name: 'Rainfall',
+                data: combinedArray,
+                marker: {
+                    enabled: null, // auto
+                    radius: 3,
+                    lineWidth: 1,
+                    lineColor: '#FFFFFF'
+                },
+                tooltip: {
+                    valueDecimals: 2
+                }
+            }]
+        });
     });
 }
 
-getData(timePeriod); //Initially set to display last 24 hours
+getData(); 
 
 
 
-// update data when time period is changed
-const timePeriodSelect = document.getElementById('timePeriod');
-timePeriodSelect.addEventListener('change', event => {
-    timePeriod = parseInt(event.target.value);
-    getData(timePeriod, showCumulativeData);
-});
-
-const cumulativeCheckbox = document.getElementById("cumulativeCheckbox");
-cumulativeCheckbox.addEventListener('click', event => {
-    showCumulativeData = cumulativeCheckbox.checked;
-    getData(timePeriod, showCumulativeData);
-})
 
 
 

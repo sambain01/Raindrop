@@ -19,3 +19,10 @@
   body{
     background-color: whitesmoke;
   }
+
+#container {
+  height: 400px;
+  min-width: 600px;
+  max-width: 800px;
+  margin: 0 auto;
+}
