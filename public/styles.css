@@ -1,0 +1,21 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  .page_select {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: 15%;
+    padding-left: 5%;
+    padding-right: 5%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 7%;
+    background-color: green;
+  }
+
+  body{
+    background-color: whitesmoke;
+  }
