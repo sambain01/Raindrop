@@ -10,50 +10,70 @@ function getData() {
 
     // Variables to save database current values
     var dateTimeString;
-    var timeString;
+    var time;
     var dateTime;
     var rainfall;
+    var cumulativeRainfall = 0;
 
     firebase.database().ref(genericPath).once('value').then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             rainfall = parseFloat(childSnapshot.child("RainfallTotal").val());
+            cumulativeRainfall += rainfall;
             dateTimeString = childSnapshot.child("DateTime").val();
             dateTime = new Date(dateTimeString);
-            timeString = parseInt(dateTime.getTime())
+            time = parseInt(dateTime.getTime())
 
-            combinedArray.push([timeString, rainfall]) 
+            combinedArray.push([time, rainfall]) 
         });
         
         Highcharts.stockChart('myChart', {
-
+            
             chart: {
+                
                 height: 300
             },
         
             rangeSelector: {
                 allButtonsEnabled: true,
                 buttons: [{
-                    type: 'month',
-                    count: 3,
+                    type: 'day',
+                    count: 1,
                     text: 'Day',
                     dataGrouping: {
+                        forced: false
+                    }
+                }, {
+                    type: 'week',
+                    count: 1,
+                    text: 'Week',
+                    dataGrouping: {
+                        forced: false
+                    }
+                }, {
+                    type: 'month',
+                    count: 1,
+                    text: 'Month',
+                    dataGrouping: {
                         forced: true,
-                        units: [['day', [1]]]
+                        units: [['day', [1]]],
+                        approximation: 'sum'
                     }
                 }, {
                     type: 'year',
                     count: 1,
-                    text: 'Week',
+                    text: 'Year',
                     dataGrouping: {
                         forced: true,
-                        units: [['week', [1]]]
+                        units: [['week', [1]]],
+                        approximation: 'sum'
                     }
                 }, {
                     type: 'all',
-                    text: 'Month',
+                    text: 'All',
                     dataGrouping: {
                         forced: true,
-                        units: [['month', [1]]]
+                        units: [['month', [1]]],
+                        approximation: 'sum'
                     }
                 }],
                 buttonTheme: {
@@ -67,6 +87,7 @@ function getData() {
             },
         
             series: [{
+                type: 'column',
                 name: 'Rainfall',
                 data: combinedArray,
                 marker: {
