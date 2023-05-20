@@ -1,4 +1,3 @@
-<!-- Complete Project Details at: https://RandomNerdTutorials.com/ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +14,8 @@
         https://firebase.google.com/docs/web/setup#available-libraries -->
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
 
+    <script src="https://kit.fontawesome.com/c4a726bc5c.js" crossorigin="anonymous"></script>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyChPhlVOnhRy6GcIxGohfVd7JxiTAXaTjQ",
@@ -29,46 +30,30 @@
         firebase.initializeApp(firebaseConfig);
         var database = firebase.database();
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 </head>
 
 <body>
+
     <h1>Settings</h1>
 
     <p>Add new device</p>
     <p>Update Wifi network</p>
     <p>Allow OTA updates</p>
-    <p>Send Feedback</p>
-    <!-- <p>Date: <span id="reading-int"></span></p>
-    <p>Rainfall (mm): <span id="reading-float"></span></p>
+    <p>Send Feedback</p>  
+    
+    <nav>
+        <ul>
+            
+            <li> <a class="tooltip" data-tooltip="Temperature" href="#" id="temperature"> <i class="fa-solid fa-temperature-half"></i></a> </li>
+            <li> <a class="tooltip" data-tooltip="Rainfall" href="index.html" id="rainfall"> <i class="fa-solid fa-cloud-showers-heavy"></i> </a></li>
+            <li> <a class="tooltip active" data-tooltip="Settings" href="#" id="settings"> <i class="fa-solid fa-gear"></i> </a> </li>
+    
 
-    <label for="timePeriod">Select time period:</label>
-    <select id="timePeriod">
-    <option value=24>Last 24 hours</option>
-    <option value=48>Last 48 hours</option>
-    <option value=72>Last 72 hours</option>
-    </select>
-
-    <label>
-        <input type="checkbox" id="cumulativeCheckbox"> Show cumulative data
-    </label>
-
-    <canvas id="myChart" style="width:100%;max-width:700px"></canvas> -->
-
-    <div class="page_select">
-        <div class="page_symbol">
-            <a href= "cumulative.html"><img src="images/cumulative.png" alt="Cumulative" style="width:100%"></a>
-        </div>
-        <div class="page_symbol">
-            <a href= "index.html"><img src="images/rain.png" alt="Rain" style="width:100%"></a>
-        </div>
-        <div class="page_symbol">
-            <a href= "temperature.html"><img src="images/temperature.png" alt="Temperature" style="width:100%"></a>
-        </div>
-        <div class="page_symbol">
-            <a><img src="images/settings.png" alt="Settings" style="width:100%"></a>
-        </div>
-    </div>
+        </ul>
+    </nav>
 
 </body>
 </html>

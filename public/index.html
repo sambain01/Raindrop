@@ -14,6 +14,8 @@
         https://firebase.google.com/docs/web/setup#available-libraries -->
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
 
+    <script src="https://kit.fontawesome.com/c4a726bc5c.js" crossorigin="anonymous"></script>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyChPhlVOnhRy6GcIxGohfVd7JxiTAXaTjQ",
@@ -34,35 +36,30 @@
 </head>
 
 <body>
-    <div id="page-content">
-        <h1>Rainfall</h1>
 
-        <div id="myChart"></div>
+    <h1>Rainfall</h1>
 
-        <div id="stats">
-            <h2>Cumulative</h2>
-            <p>Last 24 hours:</p>
-            <p>Last 48 hours:</p>
-            <p>Last week:</p>
-            <p>Last month:</p>
-            <p>Last year:</p>
-        </div>     
-    </body>
+    <div id="myChart"></div>
+
+    <div id="stats">
+        <h2>Cumulative</h2>
+        <p>Last 24 hours:</p>
+        <p>Last 48 hours:</p>
+        <p>Last week:</p>
+        <p>Last month:</p>
+        <p>Last year:</p>
+    </div>     
     
-    <div class="page_select">
-        <div class="page_symbol">
-            <a href= "cumulative.html"><img src="images/cumulative.png" alt="Cumulative" ></a>
-        </div>
-        <div class="page_symbol">
-            <a><img src="images/rain.png" alt="Rain"></a>
-        </div>
-        <div class="page_symbol">
-            <a href= "temperature.html"><img src="images/temperature.png" alt="Temperature"></a>
-        </div>
-        <div class="page_symbol">
-            <a href= "settings.html"><img src="images/settings.png" alt="Settings"></a>
-        </div>
-    </div>
+    <nav>
+        <ul>
+            
+            <li> <a class="tooltip" data-tooltip="Temperature" href="#" id="temperature"> <i class="fa-solid fa-temperature-half"></i></a> </li>
+            <li> <a class="tooltip active" data-tooltip="Rainfall" href="#" id="rainfall"> <i class="fa-solid fa-cloud-showers-heavy"></i> </a></li>
+            <li> <a class="tooltip" data-tooltip="Settings" href="settings.html" id="settings"> <i class="fa-solid fa-gear"></i> </a> </li>
+    
+
+        </ul>
+    </nav>
 
 </body>
 </html>
