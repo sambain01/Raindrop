@@ -1,10 +1,9 @@
-var genericPath = 'data/item/';
+var genericPath = 'UsersData/sams_house/';
 var lastValue;
 var timePeriod = 24;
 var showCumulativeData;
 
-var currentDate = new Date("2023-05-19T00:00:00+12:00"); 
-console.log(currentDate.getFullYear());
+const currentDate = Date.now();
 
 const day_ms = 1000*60*60*24; //One day in ms
 const week_ms = 7*day_ms; //One week in milliseconds
@@ -15,46 +14,22 @@ function getData() {
     var combinedArray = [];
 
     // Variables to save database current values
-    var dateTimeString;
+    var dateTimeMilliseconds;
     var time;
     var dateTime;
-    var rainfall;
-    var diffTime;
-    var cumulativeDayRainfall = 0;
-    var cumulative48Rainfall = 0;
-    var cumulativeWeekRainfall = 0;
-    var cumulativeMonthRainfall = 0;
-    var cumulativeYearRainfall = 0;
+    var voltage;
 
     firebase.database().ref(genericPath).once('value').then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-            rainfall = parseFloat(childSnapshot.child("RainfallTotal").val());
-            dateTimeString = childSnapshot.child("DateTime").val();
-            dateTime = new Date(dateTimeString);
-            if (dateTime.getFullYear() == currentDate.getFullYear()) {
-                cumulativeYearRainfall += rainfall;
-                if (dateTime.getMonth() == currentDate.getMonth()) {
-                    cumulativeMonthRainfall += rainfall;
-                    if (dateTime.getDay() == currentDate.getDay()) {
-                        cumulativeDayRainfall += rainfall;
-                    }    
-                }               
-            }
-
-            diffTime = currentDate - dateTime;
-            if (diffTime < week_ms) {
-                cumulativeWeekRainfall += rainfall;
-                if (diffTime < 2*day_ms) {
-                    cumulative48Rainfall += rainfall;
-                }
-            }  
-            
-
-            time = parseInt(dateTime.getTime())
-            combinedArray.push([time, rainfall]) 
+            voltage = parseFloat(childSnapshot.child("batt volt").val());
+            dateTimeMilliseconds = childSnapshot.child("timestamp").val()*1000;
+            dateTime = new Date(dateTimeMilliseconds);
+            console.log(dateTime)
+            time = parseInt(dateTime.getTime()) //Returns time in milliseconds since Jan 1st, 1970
+            combinedArray.push([time, voltage]) 
         });
         
-        Highcharts.stockChart('myChart', {
+        Highcharts.stockChart('batteryChart', {
             
             chart: {
                 
@@ -84,7 +59,7 @@ function getData() {
                     dataGrouping: {
                         forced: true,
                         units: [['day', [1]]],
-                        approximation: 'sum'
+                        // approximation: 'sum'
                     }
                 }, {
                     type: 'year',
@@ -93,7 +68,7 @@ function getData() {
                     dataGrouping: {
                         forced: true,
                         units: [['week', [1]]],
-                        approximation: 'sum'
+                        // approximation: 'sum'
                     }
                 }, {
                     type: 'all',
@@ -101,7 +76,7 @@ function getData() {
                     dataGrouping: {
                         forced: true,
                         units: [['month', [1]]],
-                        approximation: 'sum'
+                        // approximation: 'sum'
                     }
                 }],
                 buttonTheme: {
@@ -115,8 +90,8 @@ function getData() {
             },
         
             series: [{
-                type: 'column',
-                name: 'Rainfall',
+                type: 'line',
+                name: 'Voltage',
                 data: combinedArray,
                 marker: {
                     enabled: null, // auto
@@ -129,18 +104,6 @@ function getData() {
                 }
             }]
         });
-
-        const cumDayElement = document.getElementById("cumDay");
-        const cum48Element = document.getElementById("cum48");
-        const cumWeekElement = document.getElementById("cumWeek");
-        const cumMonthElement = document.getElementById("cumMonth");
-        const cumYearElement = document.getElementById("cumYear");
-
-        cumDayElement.innerHTML = cumulativeDayRainfall;
-        cum48Element.innerHTML = cumulative48Rainfall;
-        cumWeekElement.innerHTML = cumulativeWeekRainfall;
-        cumMonthElement.innerHTML = cumulativeMonthRainfall;
-        cumYearElement.innerHTML = cumulativeYearRainfall;
     });
     
 }
