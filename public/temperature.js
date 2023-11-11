@@ -22,22 +22,22 @@ function getData() {
     var dateTimeMilliseconds;
     var time;
     var dateTime;
-    var voltage;
+    var temperature;
     var percent;
 
     firebase.database().ref(genericPath).once('value').then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-            voltage = parseFloat(childSnapshot.child("batt volt").val());
-            percent = 123-123/(Math.pow(1+Math.pow((voltage)/3.7,80),0.165));
-            dateTimeMilliseconds = childSnapshot.child("timestamp").val()*1000;
-            dateTime = new Date(dateTimeMilliseconds);
-            // console.log(dateTime)
-            time = parseInt(dateTime.getTime()) //Returns time in milliseconds since Jan 1st, 1970
-            combinedArray.push([dateTimeMilliseconds, voltage]) 
-
+            temperature = parseFloat(childSnapshot.child("temperature").val());
+            if (temperature != NaN) {
+                dateTimeMilliseconds = childSnapshot.child("timestamp").val()*1000;
+                dateTime = new Date(dateTimeMilliseconds);
+                // console.log(dateTime)
+                time = parseInt(dateTime.getTime()) //Returns time in milliseconds since Jan 1st, 1970
+                combinedArray.push([dateTimeMilliseconds, temperature]) 
+            }
         });
         
-        Highcharts.stockChart('batteryChart', {
+        Highcharts.stockChart('temperatureChart', {
             
             chart: {
                 

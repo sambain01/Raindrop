@@ -37,24 +37,15 @@
 
 <body>
 
-    <h1>Rainfall</h1>
+    <h1>Temperature</h1>
 
-    <div id="myChart"></div>
+    <div id="temperatureChart"></div>
 
-    <div id="stats">
-        <h2>Stats</h2>
-        <p>Today: <span id="cumDay"></span> mm</p>
-        <p>Last 48 Hours: <span id="cum48"></span> mm</p>
-        <p>Last Week: <span id="cumWeek"></span> mm</p>
-        <p>Month so far: <span id="cumMonth"></span> mm</p>
-        <p>Year so far: <span id="cumYear"></span> mm</p>
-    </div>     
-    
     <nav>
         <ul>
-            
-            <li> <a class="tooltip" data-tooltip="Temperature" href="#" id="temperature"> <i class="fa-solid fa-temperature-half"></i></a> </li>
-            <li> <a class="tooltip active" data-tooltip="Rainfall" href="#" id="rainfall"> <i class="fa-solid fa-cloud-showers-heavy"></i> </a></li>
+            <li> <a class="tooltip" data-tooltip="Battery" href="battery.html" id="battery"> <i class="fa-solid fa-battery-three-quarters"></i> </a> </li>
+            <li> <a class="tooltip active" data-tooltip="Temperature" href="#" id="temperature"> <i class="fa-solid fa-temperature-half"></i></a> </li>
+            <li> <a class="tooltip" data-tooltip="Rainfall" href="index.html" id="rainfall"> <i class="fa-solid fa-cloud-showers-heavy"></i> </a></li>
             <li> <a class="tooltip" data-tooltip="Settings" href="settings.html" id="settings"> <i class="fa-solid fa-gear"></i> </a> </li>
     
 
@@ -64,5 +55,5 @@
 </body>
 </html>
 
-<script src="aquisitions.js"></script>
+<script src="temperature.js"></script>
 
